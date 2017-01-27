@@ -65,7 +65,7 @@
 /******/ 	}
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "515f829c935d36817736"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "fe95c9501c55a86cdd64"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 /******/ 	
@@ -27715,6 +27715,8 @@
 	  value: true
 	});
 
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 	var _react = __webpack_require__(384);
 
 	var _react2 = _interopRequireDefault(_react);
@@ -27727,21 +27729,42 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var App = function () {
-	  function App(props) {
-	    return _react2['default'].createElement(
-	      _radium.StyleRoot,
-	      null,
-	      _react2['default'].createElement(
-	        'div',
-	        { style: _styles2['default'].base },
-	        props.children
-	      )
-	    );
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var App = function (_React$Component) {
+	  _inherits(App, _React$Component);
+
+	  function App() {
+	    _classCallCheck(this, App);
+
+	    return _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).apply(this, arguments));
 	  }
 
+	  _createClass(App, [{
+	    key: 'render',
+	    value: function () {
+	      function render() {
+	        return _react2['default'].createElement(
+	          _radium.StyleRoot,
+	          null,
+	          _react2['default'].createElement(
+	            'div',
+	            { style: _styles2['default'].base },
+	            this.props.children
+	          )
+	        );
+	      }
+
+	      return render;
+	    }()
+	  }]);
+
 	  return App;
-	}();
+	}(_react2['default'].Component);
 
 	App.propTypes = {
 	  children: _react.PropTypes.node
@@ -31955,10 +31978,13 @@
 	      url: '',
 	      md: '',
 	      loaded: false
-	    }, _this.fetchMd = function () {
-	      var arr = _this.state.url.split('.');
-	      if (arr[arr.length - 1] !== 'md') return alert('Only .MD files are allowed. Please check your file link and try again.');
-	      fetch(_this.state.url, {
+	    }, _this.validateMD = function (url) {
+	      var arr = url.split('.');
+	      if (arr[arr.length - 1] !== 'md') return false;
+	      return true;
+	    }, _this.fetchMd = function (url) {
+	      if (!_this.validateMD(url)) return false;
+	      fetch(url, {
 	        method: 'GET',
 	        mode: 'CORS'
 	      }).then(function (res) {
@@ -32001,31 +32027,38 @@
 	      return componentDidMount;
 	    }()
 	  }, {
+	    key: 'componentWillUpdate',
+	    value: function () {
+	      function componentWillUpdate(nextProps) {
+	        if (nextProps.location.query.url !== this.props.location.query.url) {
+	          this.setState({
+	            url: '',
+	            md: '',
+	            loaded: false
+	          });
+	        }
+	      }
+
+	      return componentWillUpdate;
+	    }()
+	  }, {
 	    key: 'render',
 	    value: function () {
 	      function render() {
 	        var _this2 = this;
 
+	        if (this.props.location.query.url) {
+	          this.fetchMd(this.props.location.query.url);
+	        }
 	        return _react2['default'].createElement(
 	          'div',
 	          { style: _styles2['default'].base },
 	          this.state.loaded ? _react2['default'].createElement('div', { style: _styles2['default'].body, className: 'markdown-body', dangerouslySetInnerHTML: { __html: this.renderMd() } }) : _react2['default'].createElement(
 	            'div',
-	            { style: {
-	                display: 'flex',
-	                flexFlow: 'column nowrap',
-	                alignItems: 'center',
-	                justifyContent: 'center',
-	                height: '100vh'
-	              } },
+	            { style: _styles2['default'].docWrapper },
 	            _react2['default'].createElement(
 	              'h1',
-	              { style: {
-	                  fontSize: '4em',
-	                  textTransform: 'uppercase',
-	                  letterSpacing: -5,
-	                  margin: 'auto auto 20px'
-	                } },
+	              { style: _styles2['default'].title },
 	              'MRKDWN'
 	            ),
 	            _react2['default'].createElement('input', {
@@ -32039,31 +32072,21 @@
 
 	                return onChange;
 	              }(),
-	              style: {
-	                padding: 15,
-	                fontSize: '1.1em',
-	                borderRadius: 5,
-	                border: '1px solid #eee',
-	                outline: 'none',
-	                width: 400
-	              }
+	              style: _styles2['default'].input
 	            }),
 	            _react2['default'].createElement(
 	              'button',
 	              {
-	                onClick: this.fetchMd,
-	                style: {
-	                  padding: '20px 40px',
-	                  background: '#33cb52',
-	                  fontWeight: 700,
-	                  textTransform: 'uppercase',
-	                  borderRadius: 5,
-	                  color: '#fff',
-	                  margin: '20px auto auto',
-	                  border: 0
-	                }
+	                onClick: function () {
+	                  function onClick() {
+	                    return _this2.fetchMd(_this2.state.url);
+	                  }
+
+	                  return onClick;
+	                }(),
+	                style: _styles2['default'].btn
 	              },
-	              'Load'
+	              'Load File'
 	            )
 	          )
 	        );
@@ -49866,15 +49889,46 @@
 /* 713 */
 /***/ function(module, exports) {
 
-	"use strict";
+	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
 	var _default = {
-	  base: {}
+	  base: {},
+	  docWrapper: {
+	    display: 'flex',
+	    flexFlow: 'column nowrap',
+	    alignItems: 'center',
+	    justifyContent: 'center',
+	    height: '100vh'
+	  },
+	  title: {
+	    fontSize: '3.5em',
+	    textTransform: 'uppercase',
+	    letterSpacing: -4,
+	    margin: 'auto auto 20px'
+	  },
+	  input: {
+	    padding: 15,
+	    fontSize: '1.1em',
+	    borderRadius: 5,
+	    border: '1px solid #eee',
+	    outline: 'none',
+	    width: 400
+	  },
+	  btn: {
+	    padding: '20px 40px',
+	    background: '#33cb52',
+	    fontWeight: 700,
+	    textTransform: 'uppercase',
+	    borderRadius: 5,
+	    color: '#fff',
+	    margin: '20px auto auto',
+	    border: 0
+	  }
 	};
-	exports["default"] = _default;
+	exports['default'] = _default;
 	;
 
 	var _temp = function () {
@@ -49882,7 +49936,7 @@
 	    return;
 	  }
 
-	  __REACT_HOT_LOADER__.register(_default, "default", "/Users/adam/projects/mrkdwn/src/views/HomeView/styles.js");
+	  __REACT_HOT_LOADER__.register(_default, 'default', '/Users/adam/projects/mrkdwn/src/views/HomeView/styles.js');
 	}();
 
 	;

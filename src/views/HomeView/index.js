@@ -28,10 +28,25 @@ export default class HomeView extends React.Component {
     });
   }
 
-  fetchMd = () => {
-    const arr = this.state.url.split('.');
-    if (arr[arr.length - 1] !== 'md') return alert('Only .MD files are allowed. Please check your file link and try again.');
-    fetch(this.state.url, {
+  componentWillUpdate(nextProps) {
+    if (nextProps.location.query.url !== this.props.location.query.url) {
+      this.setState({
+        url: '',
+        md: '',
+        loaded: false,
+      });
+    }
+  }
+
+  validateMD = (url) => {
+    const arr = url.split('.');
+    if (arr[arr.length - 1] !== 'md') return false;
+    return true;
+  }
+
+  fetchMd = (url) => {
+    if (!this.validateMD(url)) return false;
+    fetch(url, {
       method: 'GET',
       mode: 'CORS',
     })
@@ -49,54 +64,30 @@ export default class HomeView extends React.Component {
   }
 
   render() {
+    if (this.props.location.query.url) {
+      this.fetchMd(this.props.location.query.url);
+    }
     return (
       <div style={styles.base}>
         {this.state.loaded ? (
           <div style={styles.body} className="markdown-body" dangerouslySetInnerHTML={{ __html: this.renderMd() }} />
         ) : (
-          <div style={{
-            display: 'flex',
-            flexFlow: 'column nowrap',
-            alignItems: 'center',
-            justifyContent: 'center',
-            height: '100vh',
-          }}>
-            <h1 style={{
-              fontSize: '4em',
-              textTransform: 'uppercase',
-              letterSpacing: -5,
-              margin: 'auto auto 20px',
-            }}>MRKDWN</h1>
+          <div style={styles.docWrapper}>
+            <h1 style={styles.title}>MRKDWN</h1>
 
             <input
               type="text"
               placeholder="url to markdown file"
               value={this.state.url}
               onChange={e => this.setState({ url: e.target.value })}
-              style={{
-                padding: 15,
-                fontSize: '1.1em',
-                borderRadius: 5,
-                border: '1px solid #eee',
-                outline: 'none',
-                width: 400,
-              }}
+              style={styles.input}
             />
 
             <button
-              onClick={this.fetchMd}
-              style={{
-                padding: '20px 40px',
-                background: '#33cb52',
-                fontWeight: 700,
-                textTransform: 'uppercase',
-                borderRadius: 5,
-                color: '#fff',
-                margin: '20px auto auto',
-                border: 0,
-              }}
+              onClick={() => this.fetchMd(this.state.url)}
+              style={styles.btn}
             >
-              Load
+              Load File
             </button>
           </div>
         )}
