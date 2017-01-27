@@ -1,7 +1,7 @@
 {
-  "name": "react-es7-starter",
+  "name": "mrkdwn-pro",
   "version": "0.1.0",
-  "description": "A boilerplate front-end using React, ES7 & Webpack",
+  "description": "MRKDWN",
   "main": "./src/core/app.js",
   "scripts": {
     "dev": "node_modules/.bin/webpack-dev-server",
@@ -11,8 +11,7 @@
     "type": "git",
     "url": "https://github.com/asidiali/react-es7-starter.git"
   },
-  "author": "adamsidiali",
-  "license": "GPL",
+  "author": "asidiali",
   "bugs": {
     "url": "https://github.com/asidiali/react-es7-starter/issues"
   },
@@ -36,7 +35,9 @@
     "eslint-plugin-import": "^2.0.0",
     "eslint-plugin-jsx-a11y": "^2.2.2",
     "eslint-plugin-react": "^6.3.0",
+    "highlight.js": "^9.9.0",
     "html-webpack-plugin": "^2.22.0",
+    "marked": "^0.3.6",
     "radium": "^0.18.1",
     "react": "^15.3.2",
     "react-dom": "^15.3.2",
