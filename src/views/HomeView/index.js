@@ -1,3 +1,5 @@
+import 'whatwg-fetch';
+
 import React from 'react';
 import highlight from 'highlight.js';
 import marked from 'marked';

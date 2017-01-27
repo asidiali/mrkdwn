@@ -5,6 +5,7 @@ module.exports = {
   name: 'client',
   entry: [
     'babel-polyfill',
+    'whatwg-fetch',
     'webpack-dev-server/client?http://localhost:8080',
     'webpack/hot/only-dev-server',
     './src/_core/index.js',
